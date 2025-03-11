@@ -133,8 +133,10 @@ const ProfileSettings = () => {
         );
         const artisanData = await artisanResponse.json();
   
-       // console.log("artisanData", artisanData);
+
+        console.log("artisanData", artisanData);
   
+        
         // Handle skills field
         let parsedSkills = [];
         if (typeof artisanData.skills === "string") {

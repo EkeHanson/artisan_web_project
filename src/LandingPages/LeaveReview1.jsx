@@ -5,8 +5,20 @@ import { Link } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FlashMessage from "../FlashMessage/FlashMessage.jsx";
 
-
 const LeaveReview1 = () => {
+
+    const user_unique_user_id = sessionStorage.getItem('unique_user_id');
+    const user_access_token = sessionStorage.getItem('access_token');
+    const user_type = sessionStorage.getItem('user_type');
+
+    
+    useEffect(() => {
+
+      if (!user_unique_user_id || !user_access_token || user_type !== "customer") {
+        alert("You must be logged in as a customer to leave a review.");
+        navigate("/login");
+      }
+    }, []);
 
   const [flash, setFlash] = useState(null);    
   const showMessage = (message, type) => {
@@ -30,10 +42,7 @@ const LeaveReview1 = () => {
   const [activeCourtesyButton, setActiveCourtesyButton] = useState(null);
   const [isCheckedCourtesy, setIsCheckedCourtesy] = useState(false);
 
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  
 
   const [reviewData, setReviewData] = useState({
     service_category_id: '',
@@ -45,7 +54,9 @@ const LeaveReview1 = () => {
     courtesy_rating: null,
     overall_rating: null,
     review_title: '',
+
     comment: '',
+
     service_required: '',
     date_of_experience: '',
     contact_name: '',
@@ -53,11 +64,9 @@ const LeaveReview1 = () => {
     mobile_number: '',
   });
 
-  
   const handleInputChangeReview = (field, value) => {
     setReviewData((prev) => ({ ...prev, [field]: value }));
   };
-
 
   const handleRatingChange = (field, value) => {
     if (!isCheckedReliability && !isCheckedWorkmanship && !isCheckedTidiness && !isCheckedCourtesy) {
@@ -82,8 +91,6 @@ const LeaveReview1 = () => {
     setActiveCourtesyButton(value);
     handleRatingChange('courtesy', value);
   };
-
-  
 
 const handleSubmit = async (event) => {
   event.preventDefault();

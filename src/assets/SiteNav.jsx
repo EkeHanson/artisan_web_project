@@ -217,6 +217,7 @@ function SiteNav() {
  
 
 useEffect(() => {
+
   const user_unique_user_id = sessionStorage.getItem("unique_user_id");
   const user_type = sessionStorage.getItem("user_type"); // Assuming user type is stored in sessionStorage
 
@@ -338,7 +339,7 @@ useEffect(() => {
         <div className="Main-Gen-DropDwn" ref={userDropdownRef}>
           <div className="Genns-Top">
             <div className="Genns-Top-1">
-              <img src={userImage || ProfilePlaceholder} alt="Profile" />
+              {/* <img src={userImage} alt="Profile" /> */}
 
               {/* <img
                       src={ `${djangoHostname}${artisanData.user_image}`  || ProfilePlaceholder}
@@ -421,9 +422,9 @@ useEffect(() => {
               
             {/* <img src= {userImage || ProfilePlaceholder} alt="Profile" /> */}
 
-            <img
+            {/* <img
               src={ `${djangoHostname}${userImage}`  || ProfilePlaceholder} alt="Profile"
-            />
+            /> */}
             </div>
             <div className="Genns-Top-2">
               <div>

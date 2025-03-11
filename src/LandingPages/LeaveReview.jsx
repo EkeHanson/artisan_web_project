@@ -10,6 +10,18 @@ import FlashMessage from "../FlashMessage/FlashMessage.jsx";
 
 const LeaveReview = () => {
 
+  const user_unique_user_id = sessionStorage.getItem('unique_user_id');
+  const user_access_token = sessionStorage.getItem('access_token');
+  const user_type = sessionStorage.getItem('user_type');
+
+      useEffect(() => {
+        if (!user_unique_user_id || !user_access_token || user_type !== "customer") {
+          alert("You must be logged in as a customer to leave a review.");
+          navigate("/login");
+        }
+      }, []);
+
+
   const [flash, setFlash] = useState(null);    
   const showMessage = (message, type) => {
     setFlash({ message, type });
@@ -24,6 +36,7 @@ const LeaveReview = () => {
   const searchParams = new URLSearchParams(location.search);
   const artisan_unique_id = decodeURIComponent(searchParams.get('artisanUniqueID') || '');
   
+
 
 
   const [suggestions, setSuggestions] = useState([]);
