@@ -1,0 +1,940 @@
+/* Gradnded-page */
+
+.Gradnded-page{
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 80vh;
+}
+
+.Gradnded-main{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 40px 0px;
+}
+
+.Gradnded-Box{
+    position: relative;
+    width: 750px;
+    padding:30px 50px;
+    height: auto;
+    /* background-color: #fff;
+    border-radius: 10px;
+    min-height: 300px;
+    box-shadow: 0 0 7px rgb(0 0 0 / 5%);
+    -webkit-box-shadow: 0 0 7px rgb(0 0 0 / 5%);
+    -moz-box-shadow: 0 0 7px rgb(0 0 0 / 5%);
+    border-top:5px solid #394c13; */
+}
+
+.Shirolls_Box{
+  width: 630px;
+}
+
+@media screen and (max-width:1000px){
+    .Gradnded-Box{
+        width: 100% !important;
+    } 
+}
+@media screen and (max-width:700px){
+    .Gradnded-Box{
+        padding: 0px 0px !important;
+    } 
+}
+.Gradnded-Box-header{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+
+.Gradnded-Box-header p{
+    font-size: 15px;
+    color: #505050;
+    display: block;
+    margin-top: 10px;
+}
+
+
+.Gradnded-Box-Body{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+}
+
+
+.Gland-Quest-data{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.Gland-Quest-data h5,
+.Gland-Quest-data label{
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.Gland-Quest-data h5{
+  text-transform: uppercase !important;
+  font-weight: 10px !important;
+}
+.Gland-Quest-data input,
+.Gland-Quest-data textarea,
+.Gland-Quest-data select{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    padding: 0px 15px;
+    border-radius: 5px;
+    border:1px solid #cccbcb;
+    transition: all 0.3s ease-in-out;
+    margin-top: 10px;
+  }
+  .Gland-Quest-data input:focus,
+  .Gland-Quest-data textarea:focus,
+  .Gland-Quest-data select:focus {
+    border-color: #B1BD3B;
+    outline: none;
+    border-width: 2px;
+  }
+  .Gland-Quest-data textarea{
+    height: 150px;
+    resize: none;
+    padding: 15px;
+  }
+
+
+  .service-details{
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .Gland-Quest-data ul{
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .GG-UL-Flex{
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    grid-gap: 20px !important;
+  }
+
+  .GG-UL-Flex li{
+    height: 70px !important;
+  }
+
+  @media screen and (max-width:600px){
+    .GG-UL-Flex{
+      display: block !important;
+    }
+  }
+
+.Gland-Quest-data ul li{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    padding: 0px 15px;
+    border-radius: 5px;
+    border:1px solid #cccbcb;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    user-select: none;
+    cursor: pointer;
+    padding-right: 30px;
+  }
+  .Gland-Quest-data ul li span span{
+    font-size: 12px !important;
+  }
+.Gland-Quest-data ul li::before{
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border:1px solid #cccbcb;
+    border-radius: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    top: 50%;
+  }
+  .Gland-Quest-data ul li.active-ooo-lip,
+.Gland-Quest-data ul li.active-gland-list-Li{
+    background-color: #F1F1F1;
+    border-color: #B1BD3B;
+    border-width: 2px;
+    color: #000;
+  }
+  .Gland-Quest-data ul li.active-ooo-lip::before,
+.Gland-Quest-data ul li.active-gland-list-Li::before{
+    border-color: #B1BD3B;
+    border-width: 2px;
+    background-color: #B1BD3B !important;
+  }
+
+  .gahys-li ul li{
+    flex-direction: column !important;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: auto !important;
+    min-height: 50px;
+    padding: 10px 15px !important;
+    padding-right: 30px !important;
+  }
+
+  .gahys-li ul li span{
+    font-size: 12px;
+    color: #505050 !important;
+  }
+
+
+  /* Gland-Cnt-Btn */
+
+  .Gland-Cnt-Btn{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-gap: 10px;
+  }
+
+  .Gland-Cnt-Btn a,
+  .Gland-Cnt-Btn button{
+    position: relative;
+    width: auto;
+    height: 40px;
+    padding: 0px 20px;
+    border-radius: 5px;
+    border:2px solid #B1BD3B;
+    background-color: transparent;
+    color: #B1BD3B;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .Gland-Cnt-Btn a:hover,
+  .Gland-Cnt-Btn button:hover{
+    background-color: #e2e1e1;
+  }
+  .Gland-Cnt-Btn a:last-child,
+  .Gland-Cnt-Btn button:last-child{
+    background-color: #B1BD3B;
+    color: #fff;
+  }
+  .Gland-Cnt-Btn a:last-child:hover,
+  .Gland-Cnt-Btn button:last-child:hover{
+    background-color: #96a131;
+  }
+
+  .Shirolls_Box .Gland-Cnt-Btn button{
+    width: 100% !important;
+    height: 50px !important;
+  }
+
+
+  .suggestions-list {
+    margin-top: 5px;
+    padding: 0 !important;
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .suggestions-list li {
+    padding: 10px !important;
+    cursor: pointer;
+    margin: 0px !important;
+    border:none !important;
+    border-radius: 0px !important;
+  }
+  
+  .suggestions-list li:hover {
+    background-color: #f0f0f0 !important;
+  }
+  
+  .error-message{
+    color: #f51111;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .glahs-sec{
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+
+
+  /* Opticas */
+
+  .Opticas{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #eeeded;
+    overflow: hidden;
+    margin-top: 10px;
+    border-radius: 5px;
+    gap: 5px;
+    grid-gap: 5px;
+  }
+
+  .Opticas button{
+    position: relative;
+    width: 100%;
+    height: 35px;
+    background-color: transparent;
+    border-radius: inherit;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .Opticas button:hover{
+    background-color: #e4e2e2;
+  }
+
+ button.active-dect-btn{
+    background-color: #B1BD3B !important;
+    color: #fff !important;
+    border-color: #B1BD3B !important;
+  }
+
+  .omac-p{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+  .omac-p:first-child{
+    margin-top: 10px;
+  }
+  .Gland-Quest-data h6{
+    font-size: 13px;
+    font-weight: normal;
+    color: #505050;
+  }
+  .omac-p h6{
+    font-size: 13px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    color: #505050;
+  }
+
+  .omac-p h4{
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .omac-p-btns{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    grid-gap: 5px;
+    margin-top: 15px;
+  }
+
+  .omac-p-btns button{
+    position: relative;
+    width: 100%;
+    height: 35px;
+    border:1px solid #cccbcb;
+    background-color: #fff;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+
+  @media screen and (max-width:400px){
+    .omac-p-btns button{
+      font-size: 9px !important;
+      height: 20px !important;
+    }
+  }
+
+  .omac-p-btns button:hover{
+    background-color: #e4e2e2;
+  }
+
+  .not-applicable-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .styled-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    width: 100%;
+    user-select: none;
+  }
+  
+  .styled-checkbox {
+    width: 13px !important;
+    height: 13px !important;
+    font-size: 10px !important;
+    cursor: pointer;
+    accent-color: #007bff; 
+    margin: 0px !important;
+    margin-right: 5px !important;
+    margin-top: 4px !important;
+  }
+  
+  
+  .not-applicable-section h5 {
+    font-size: 13px !important;
+    font-weight: normal !important;
+    color: #505050 !important;
+  }
+  
+
+
+
+  /* word-counter */
+
+  .word-counter{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: 10px;
+    color: #505050;
+  }
+
+  .ghha-foot{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+  }
+
+  .ghha-foot p{
+    font-size: 14px;
+    color: #505050;
+  }
+
+  .ghha-foot p a{
+    color: #B1BD3B;
+    font-weight: 500;
+  }
+  .ghha-foot p a:hover{
+    text-decoration: underline;
+  }
+
+
+
+  /* flangSec */
+
+  .flangSec{
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-gap: 10px;
+    margin-top: 10px !important;
+  }
+
+  .flangSec input{
+    margin-top: 0px !important;
+  }
+
+  .flangSec button{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+    height: 50px;
+    padding: 0px 15px;
+    white-space: nowrap;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    gap: 5px;
+    grid-gap: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid #B1BD3B;
+    color: #96a131;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .flangSec button svg{
+    font-size: 14px;
+  }
+
+  .flangSec button:hover{
+    background-color: #e6e6e6;
+  }
+
+  .skills-container{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 5px;
+    margin-left: -5px;
+  }
+
+  .skill-box{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    grid-gap: 8px;
+    border: 1px solid #cccbcb;
+    background-color: transparent;
+    margin: 5px;
+    padding: 5px 10px;
+    padding-right: 5px;
+    border-radius: 40px;
+    text-transform: capitalize;
+    font-size: 12px;
+  }
+
+  .skill-box button{
+    background-color: #e6e6e6;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border:none;
+    color: #505050;
+  }
+
+  .skill-box button svg{
+    font-size: 13px;
+  }
+
+  .skill-box button:hover{
+    background-color: #96a131;
+    color: #fff;
+  }
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+
+
+
+
+
+  /* orl-Line */
+
+  .orl-Line{
+    position: relative;
+    width: 100%;
+    height: 1px;
+    margin-top: 30px;
+    border-top:1px solid #cccbcb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .orl-Line span{
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #F8F8F8;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .fffa-btns{
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    grid-gap: 20px;
+  }
+
+  @media screen and (max-width:700px){
+    .fffa-btns{
+      display:flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      grid-gap: 10px !important;
+    }  
+  }
+
+  .fffa-btns button{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    grid-gap: 8px;
+    padding: 0px 20px;
+    height: 50px;
+    width: 100%;
+    background-color: #F1F1F1;
+    border: 1px solid #cccbcb;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .fffa-btns button:hover{
+    background-color: transparent;
+  }
+
+  .fffa-btns button img{
+    width:23px;
+  }
+
+  @media screen and (max-width:250px){
+    .fffa-btns button{
+      font-size: 12px !important;
+    }
+    .fffa-btns button img{
+      width:20px !important;
+    }
+  }
+
+
+  .Gland-Quest-data.gghaja-flex{
+    width: 100% !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    grid-gap: 10px !important;
+    margin-top: 0px !important;
+  }
+
+  .gghaja-flex input{
+    width: 100% !important;
+    margin-top: 0px !important;
+  }
+  @media screen and (max-width:250px){
+    .gghaja-flex input{
+      height: 40px !important;
+    }
+  }
+  .gghaja-flex input[type="number"] {
+  -moz-appearance: textfield; 
+  -webkit-appearance: none; 
+  appearance: none; 
+}
+
+  .gghaja-flex input[type="number"]::-webkit-outer-spin-button,
+  .gghaja-flex input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; 
+}
+
+
+.hga-body{
+  margin-top: 20px !important;
+}
+
+
+.Gradnded-Box-header.uupoa p a,
+.ghha-foot p button{
+  font-weight: 600;
+  background-color: transparent;
+  outline: none !important;
+  border:none !important;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.3s ease-in-out;
+  color: #B1BD3B;
+}
+
+.Gradnded-Box-header.uupoa p a,
+.ghha-foot p button:hover{
+  color: #96a131;
+}
+
+.hhoa-P{
+  color: #505050 !important;
+  font-size: 14px !important;
+}
+
+.jjhs-Ull li{
+  padding: 0px !important;
+  border-radius: 0px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  grid-gap: 10px !important;
+}
+
+.jjhs-Ull li::before{
+  display: none !important;
+}
+
+.jjhs-Ull li button{
+  position: relative;
+  width: 40px;
+  height: 25px;
+  background-color: #d0cfcf;
+  border-radius: 40px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.jjhs-Ull li button::before{
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  left: 3.5px;
+  transition: all 0.3s ease-in-out;
+}
+.jjhs-Ull li button.active-OOBtnPush{
+  background-color: #B1BD3B;
+}
+.jjhs-Ull li button.active-OOBtnPush::before{
+  margin-left: 15.5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* cccrs-secs-header */
+
+.cccrs-secs-header{
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  grid-gap: 10px;
+}
+@media screen and (max-width:400px){
+  .cccrs-secs-header{
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+}
+.cccrs-secs-header label{
+  margin-bottom: 0px !important;
+}
+
+.cccrs-secs-header span{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid: 3px;
+  grid-gap: 3px;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-radius: 30px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: #F1F1F1 !important;
+  border:1px solid #d6d6d6;
+  user-select: none;
+}
+
+.cccrs-secs-header span svg{
+  font-size: 11px;
+}
+
+.cccrs-secs-header span:hover{
+  background-color: #e2e0e0 !important;
+}
+
+
+.remove-inputt-span{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 15px;
+  height: 15px;
+  background-color: #fd3e3e !important;
+  color: #fff !important;
+  border-radius: 50%;
+  margin-top: 3px;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.remove-inputt-span svg{
+  font-size: 12px;
+}
+
+.remove-inputt-span:hover{
+  background-color: #fc6b6b !important;
+}
+
+
+.subb-box-Btns{
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  grid-gap: 10px;
+}
+
+
+.subb-box-Btns button,
+.subb-box-Btns a{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid: 3px;
+  grid-gap: 3px;
+  font-size: 9px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: transparent;
+  border:1px solid #d6d6d6;
+  user-select: none;
+}
+
+
+.subb-box-Btns button:hover{
+  background-color: #e2e0e0 !important;
+}
+
+
+.subb-box-Btns a{
+  background-color: #B1BD3B !important;
+  border-color: #B1BD3B !important;
+  color: #fff !important;
+}
+
+.subb-box-Btns a:hover{
+  background-color: #96a131 !important;
+  border-color: #96a131 !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Add space between the buttons */
+  margin-top: 10px; /* Add some margin at the top */
+}
+
+.modal-actions button {
+  padding: 20px 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-actions .download-btn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+.modal-actions .close-btn {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+.download-btn:disabled {
+  background-color: #ccc; /* Gray out the button */
+  cursor: not-allowed; /* Show not-allowed cursor */
+}
+.no-artisans-message {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #888;
+  margin: 20px 0;
+}

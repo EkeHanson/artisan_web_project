@@ -1,0 +1,206 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import './Css/ArtisanProfile.css';
+import UserImg from './Img/user-img.jpg';
+import Star from '@mui/icons-material/Star';
+import Handyman from '@mui/icons-material/Handyman';
+import MyLocation from '@mui/icons-material/MyLocation';
+import Favorite from '@mui/icons-material/Favorite';
+import Share from '@mui/icons-material/Share';
+import ChatIcon from '@mui/icons-material/Chat';
+import CallIcon from '@mui/icons-material/Call';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { toast } from 'react-toastify'; // For push notifications
+import ChatInput from './ChatInput';
+import ChatBanner from './Img/nochat-banner.svg';
+import { Link } from 'react-router-dom';
+
+const ArtisanChattingPage = () => {
+  const djangoHostname = import.meta.env.VITE_DJANGO_HOSTNAME;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+
+  const service = decodeURIComponent(searchParams.get('service') || '');
+  const artisan_name = decodeURIComponent(searchParams.get('artisan_name') || '');
+  const service_details = decodeURIComponent(searchParams.get('service_details') || '');
+  const artisan_location = decodeURIComponent(searchParams.get('artisan_location') || '');
+  const artisanUniqueID = decodeURIComponent(searchParams.get('artisanUniqueID') || '');
+  const artisan_phone = decodeURIComponent(searchParams.get('artisan_phone') || '');
+
+  const [artisanData, setArtisanData] = useState([]);
+  const [parsedSkills, setParsedSkills] = useState([]); // Add parsedSkills to state
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [showTyping, setShowTyping] = useState(false);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [hasSentFirstMessage, setHasSentFirstMessage] = useState(false);
+  const [welcomeMessageTime, setWelcomeMessageTime] = useState('');
+  const [activeSection, setActiveSection] = useState('chat');
+  const [isToggled, setIsToggled] = useState(false);
+  const [rating, setRating] = useState('');
+  const [review, setReview] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const senderID = sessionStorage.getItem('unique_user_id');
+  const senderIDEmail = sessionStorage.getItem('user_email');
+
+  const lastMessageRef = useRef(null);
+  const chatContainerRef = useRef(null);
+
+  // Fetch messages from the backend
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(
+        `${djangoHostname}/api/messaging/auth/messages/conversation/?sender=${senderID}&receiver=${artisanUniqueID}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          },
+          credentials: 'include',
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        console.error('Failed to fetch messages');
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [artisanUniqueID, senderID]);
+
+  const handleNewMessage = (newMessage) => {
+    const currentTime = new Date();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        ...newMessage,
+        isSent: true,
+        isDelivered: false,
+        timestamp: "just now",
+        created_at: currentTime.toISOString(),
+      },
+    ]);
+
+    if (!hasSentFirstMessage) {
+      setHasSentFirstMessage(true);
+      setShowTyping(true);
+      setWelcomeMessageTime(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setTimeout(() => {
+        setShowTyping(false);
+        setShowWelcomeMessage(true);
+      }, 3000);
+    }
+  };
+
+  const markMessagesAsRead = async () => {
+    const unreadMessages = messages.filter(msg => !msg.is_read && msg.receiver === senderID);
+    const messageIds = unreadMessages.map(msg => msg.id);
+
+    if (messageIds.length === 0) return;
+
+    try {
+      const response = await fetch(`${djangoHostname}/api/messaging/auth/messages/mark_as_read/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          message_ids: messageIds,
+          receiver_id: senderID,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+        setMessages(prevMessages => prevMessages.map(msg =>
+          messageIds.includes(msg.id) ? { ...msg, is_read: true } : msg
+        ));
+      } else {
+        console.error('Failed to mark messages as read');
+      }
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      markMessagesAsRead();
+    }
+  }, [messages]);
+
+  const handleNewChat = () => {
+    setMessages([]);
+    setShowTyping(false);
+    setShowWelcomeMessage(false);
+    setHasSentFirstMessage(false);
+  };
+
+  const handleSectionClick = (section) => {
+    setActiveSection(section);
+    setIsToggled(true);
+  };
+
+  const handleCloseClick = () => {
+    setActiveSection(null);
+    setIsToggled(false);
+  };
+
+  // Fetch artisan details
+  useEffect(() => {
+    const sanitizedId = artisanUniqueID?.trim();
+    const fetchArtisanDetail = async () => {
+      if (!sanitizedId) {
+        console.error('Artisan Unique ID is missing');
+        return;
+      }
+      try {
+        const response = await fetch(`${djangoHostname}/api/profiles/auth/single-artisan-profile/?unique_id=${sanitizedId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setArtisanData(data);
+
+        // Handle skills field
+        let parsedSkills = [];
+        if (typeof data.skills === "string") {
+          try {
+            parsedSkills = JSON.parse(data.skills);
+          } catch (error) {
+            parsedSkills = data.skills.split(",").map((skill) => skill.trim());
+          }
+        } else if (Array.isArray(data.skills)) {
+          parsedSkills = data.skills;
+        }
+
+        setParsedSkills(parsedSkills); // Update parsedSkills in state
+      } catch (error) {
+        console.error('Error fetching artisan data:', error);
+      }
+    };
+
