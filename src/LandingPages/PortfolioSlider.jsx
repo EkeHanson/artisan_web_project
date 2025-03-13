@@ -409,7 +409,8 @@ const PortfolioSlider = (artisanUniqueID) => {
             </p>
           </td>
           <td>
-            <span>LTD Company</span>
+            {/* <span>LTD Company</span> */}
+            <span>{artisanData?.businessType}</span>
           </td>
         </tr>
       </table>

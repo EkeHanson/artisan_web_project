@@ -354,12 +354,51 @@ const ArtisanSignUp = () => {
   // };
 
    // Update handleItemClick to capture the selected options from lists
-   const handleItemClick = (ulIndex, liIndex) => {
+  //  const handleItemClick = (ulIndex, liIndex) => {
+  //   setActiveIndex((prevState) => ({
+  //     ...prevState,
+  //     [ulIndex]: liIndex,
+  //   }));
+
+  //   // Capture the selected option based on the list index
+  //   const selectedOption = [
+  //     [
+  //       "I'm looking to fill the gaps in my diary",
+  //       "I need a steady flow of leads",
+  //       "I need as many leads as possible",
+  //       "I just want a Simservicehub profile",
+  //       "I'm not sure",
+  //     ],
+  //     ["Self Employed", "Limited company", "Looking to start a business"],
+  //     ["1", "2-5", "6-9", "10+"],
+  //   ][ulIndex][liIndex];
+
+  //   // Update formData with the selected option
+  //   if (ulIndex === 0) {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       lookingFor: selectedOption,
+  //     }));
+  //   } else if (ulIndex === 1) {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       businessType: selectedOption,
+  //     }));
+  //   } else if (ulIndex === 2) {
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       employeeCount: selectedOption,
+  //     }));
+  //   }
+  // };
+
+
+  const handleItemClick = (ulIndex, liIndex) => {
     setActiveIndex((prevState) => ({
       ...prevState,
       [ulIndex]: liIndex,
     }));
-
+  
     // Capture the selected option based on the list index
     const selectedOption = [
       [
@@ -372,7 +411,7 @@ const ArtisanSignUp = () => {
       ["Self Employed", "Limited company", "Looking to start a business"],
       ["1", "2-5", "6-9", "10+"],
     ][ulIndex][liIndex];
-
+  
     // Update formData with the selected option
     if (ulIndex === 0) {
       setFormData((prevData) => ({
@@ -382,7 +421,7 @@ const ArtisanSignUp = () => {
     } else if (ulIndex === 1) {
       setFormData((prevData) => ({
         ...prevData,
-        businessType: selectedOption,
+        businessType: selectedOption, // Update businessType in formData
       }));
     } else if (ulIndex === 2) {
       setFormData((prevData) => ({
@@ -391,6 +430,8 @@ const ArtisanSignUp = () => {
       }));
     }
   };
+
+
 
   const renderList = (items, ulIndex) => {
     return (
@@ -551,6 +592,8 @@ const ArtisanSignUp = () => {
                     </select>
 
                   </div>
+
+
             
                   <div className="Gland-Quest-data">
                     <label htmlFor="serviceSelect">What are you looking for?</label>
@@ -694,14 +737,6 @@ const ArtisanSignUp = () => {
                       placeholder="Tell us about yourself.."
                     />
                     </div>
-{/*                     
-                <div className="Gland-Quest-data all-prolFilw">
-                  <label>Upload Profile Photo</label>
-                  <input
-                    type="file"
-                  />
-                </div> */}
-
 
                   </div>
 

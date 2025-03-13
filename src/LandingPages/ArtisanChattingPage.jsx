@@ -295,11 +295,10 @@ const ArtisanChattingPage = () => {
         <div className="large-container">
           <p>
             <Link to="/">Simservicehub</Link>
-            <ChevronRightIcon /> {service_details}
-            <ChevronRightIcon /> {artisanData.service_details?.name && artisanData.service_details?.name
+            
+            <ChevronRightIcon /> <Link to="/user-dashboard/jobs">{artisanData.service_details?.name && artisanData.service_details?.name
               ? `${artisanData.service_details.name}`
-              : 'Artisan Name'}
-            <ChevronRightIcon /> {artisan_name}
+              : 'Artisan Name'}</Link>
             <ChevronRightIcon /> <Link to="/artisan-profile">Artisan Profile</Link>
             <ChevronRightIcon /> <Link to="/chat-with-artisan">Chat with {artisanData.user?.first_name && artisanData.user?.last_name
               ? `${artisanData.user.first_name} ${artisanData.user.last_name}`

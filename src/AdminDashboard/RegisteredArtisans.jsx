@@ -201,7 +201,7 @@ const RegisteredArtisans = () => {
         {error && <p className="error">Error: {error}</p>}
       </div>
             {/* Pagination buttons */}
-            <div className="pagination">
+         <div className="pagination">
         <button onClick={handlePreviousPage} disabled={!prevPage}>
           Previous
         </button>

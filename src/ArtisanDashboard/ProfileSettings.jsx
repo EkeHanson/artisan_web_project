@@ -33,6 +33,10 @@ const loadGoogleMapsScript = (callback) => {
 
 const ProfileSettings = () => {
 
+  const [originalQualificationsFiles, setOriginalQualificationsFiles] = useState([]);
+  const [originalPreviousJobsFiles, setOriginalPreviousJobsFiles] = useState([]);
+
+  const [selectedState, setSelectedState] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const djangoHostname = import.meta.env.VITE_DJANGO_HOSTNAME;
   const artisan_unique_id = sessionStorage.getItem('unique_user_id');
@@ -133,10 +137,8 @@ const ProfileSettings = () => {
         );
         const artisanData = await artisanResponse.json();
   
-
-        console.log("artisanData", artisanData);
+        // console.log("artisanData", artisanData);
   
-        
         // Handle skills field
         let parsedSkills = [];
         if (typeof artisanData.skills === "string") {
@@ -151,9 +153,9 @@ const ProfileSettings = () => {
           // If it's already an array, use it directly
           parsedSkills = artisanData.skills;
         }
-        
+  
         // Prepopulate qualifications and previous_jobs
-        const prepopulateFiles = async (filePaths, setFiles) => {
+        const prepopulateFiles = async (filePaths, setFiles, setOriginalFiles) => {
           const files = [];
           for (const path of filePaths) {
             try {
@@ -173,13 +175,15 @@ const ProfileSettings = () => {
             }
           }
           setFiles(files);
+          setOriginalFiles(filePaths); // Store the original file paths
         };
+  
         if (artisanData.qualifications && artisanData.qualifications.length > 0) {
-          await prepopulateFiles(artisanData.qualifications, setQualificationsFiles);
+          await prepopulateFiles(artisanData.qualifications, setQualificationsFiles, setOriginalQualificationsFiles);
         }
   
         if (artisanData.previous_jobs && artisanData.previous_jobs.length > 0) {
-          await prepopulateFiles(artisanData.previous_jobs, setPreviousJobsFiles);
+          await prepopulateFiles(artisanData.previous_jobs, setPreviousJobsFiles, setOriginalPreviousJobsFiles);
         }
   
         // Update formData and skills state with fetched data
@@ -204,12 +208,17 @@ const ProfileSettings = () => {
         setSkills(parsedSkills);
   
         // Set selected trade if available
-        if (artisanData.service_details_id) {
+        if (artisanData.service_details) {
           setSelectedTrade({
-            name: artisanData.service_details_id.name,
-            unique_id: artisanData.service_details_id.unique_id,
+            name: artisanData.service_details.name,
+            unique_id: artisanData.service_details.unique_id,
           });
-          setQuery(artisanData.service_details_id.name);
+          setQuery(artisanData.service_details.name);
+        }
+  
+        // Set selected state from artisanData
+        if (artisanData.artisan_state) {
+          setSelectedState(artisanData.artisan_state);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -220,7 +229,7 @@ const ProfileSettings = () => {
   
     fetchData();
   }, [artisan_unique_id, djangoHostname]);
-
+  
   useEffect(() => {
     const fetchServices = async () => {
       setLoading(true);
@@ -239,7 +248,6 @@ const ProfileSettings = () => {
 
     fetchServices();
   }, [djangoHostname]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -268,24 +276,80 @@ const ProfileSettings = () => {
           setError("");
         }
       }
+    } else if (name === "states") {
+      setSelectedState(value);
+      setFormData((prevData) => ({
+        ...prevData,
+        artisan_state: value,
+      }));
     }
   };
+  
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  
+  //   if (name === "trade") {
+  //     const input = value.trim();
+  //     setQuery(input);
+  
+  //     if (input === "") {
+  //       setSuggestions([]);
+  //       setError("");
+  //     } else {
+  //       const filteredSuggestions = services.filter((service) =>
+  //         service.name.toLowerCase().includes(input.toLowerCase())
+  //       );
+  //       setSuggestions(filteredSuggestions);
+  
+  //       if (filteredSuggestions.length === 0) {
+  //         setError("Trade does not exist");
+  //       } else {
+  //         setError("");
+  //       }
+  //     }
+  //   } else if (name === "states") {
+  //     setSelectedState(value);
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       artisan_state: value,
+  //     }));
+  //   }
+  // };
 
-
+  // const handleSuggestionClick = (service, unique_id) => {
+  //   setSelectedTrade({
+  //     name: service,
+  //     unique_id: unique_id, 
+  //   });
+  //   setQuery(service.name); 
+  //   setUnique_id(unique_id); 
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     trade: service.name, 
+  //   }));
+  //   setSuggestions([]); 
+  //   setError(""); 
+  // };
   const handleSuggestionClick = (service, unique_id) => {
     setSelectedTrade({
       name: service,
-      unique_id: unique_id, 
+      unique_id: unique_id,
     });
-    setQuery(service.name); 
-    setUnique_id(unique_id); 
+    setQuery(service); // Update the query with the selected service name
+    setUnique_id(unique_id); // Update the unique_id
     setFormData((prevData) => ({
       ...prevData,
-      trade: service.name, 
+      trade: service, // Update the trade field in formData
     }));
-    setSuggestions([]); 
-    setError(""); 
+    setSuggestions([]); // Clear the suggestions
+    setError(""); // Clear any error messages
   };
+  
   const handleProfilePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -293,205 +357,99 @@ const ProfileSettings = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-  
-    const requestPayload = {
-      first_name: formData.first_name,
-      last_name: formData.last_name,
-      password: formData.password,
-      email: formData.businessEmail,
-      phone: formData.businessPhone,
-      mobile_number: formData.mobile_number,
-    };
-  
-    try {
-      const response1 = await fetch(`${djangoHostname}/api/accounts/auth/api/users/${artisan_unique_id}/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestPayload),
-      });
-  
-      if (!response1.ok) {
-        const errorData = await response1.json();
-        const errorMessage = errorData.email ? errorData.email[0] : "An error occurred.";
-        setError(errorMessage);
-        setLoading(false);
-        return;
-      }
-  
-      const response1Data = await response1.json();
-      sessionStorage.setItem('unique_user_id', response1Data.unique_id);
-      sessionStorage.setItem('artisanID', response1Data.id);
-      sessionStorage.setItem('user_type', response1Data.user_type);
-  
-      if (!selectedTrade || !selectedTrade.unique_id) {
-        setError("Please select a valid trade.");
-        alert("Please select a valid trade.");
-        setLoading(false);
-        return;
-      }
-  
-      const formDataPayload = new FormData();
-      formDataPayload.append("service_details_id", unique_id);
-      formDataPayload.append("business_name", formData.business_name);
-      formDataPayload.append("location", formData.location);
-      formDataPayload.append("lookingFor", formData.lookingFor);
-      formDataPayload.append("businessType", formData.businessType);
-      formDataPayload.append("employeeCount", formData.employeeCount);
-      formDataPayload.append("skills", JSON.stringify(formData.skills.map((skill) => String(skill))));
-      formDataPayload.append("experience", formData.experience || 0);
-      formDataPayload.append("artisan_state", formData.artisan_state);
-      formDataPayload.append("postcode", formData.postcode);
-      formDataPayload.append("user_id", response1Data.unique_id);
-      formDataPayload.append("about_artisan", formData.about_artisan);
-  
-      // Append profile photo if it exists
-      if (profilePhoto) {
-        formDataPayload.append("user_image", profilePhoto);
-      }
-  
-      // Append qualifications files
-      qualificationsFiles.forEach((file, index) => {
-        if (file instanceof File) {
-          formDataPayload.append("qualifications", file);
-        } else {
-          console.error("Invalid file detected:", file);
-        }
-      });
-  
-      // Append previousJobsFiles files
-      previousJobsFiles.forEach((file, index) => {
-        if (file instanceof File) {
-          formDataPayload.append("previous_jobs", file);
-        } else {
-          console.error("Invalid file detected:", file);
-        }
-      });
-  
-      const response2 = await fetch(`${djangoHostname}/api/profiles/auth/single-artisan-profile/?unique_id=${artisan_unique_id}`, {
-        method: "PATCH",
-        body: formDataPayload, // Don't set Content-Type manually
-      });
-  
-      if (!response2.ok) {
-        const errorData = await response2.json();
-        const errorMessage = errorData.detail ? errorData.detail : "An error occurred.";
-        setError(errorMessage);
-      } else {
-        const result = await response2.json();
-        sessionStorage.setItem('artisanCategoryName', result.data.service_details.name);
-        sessionStorage.setItem('artisanCategory', result.data.service_details.unique_id);
-        navigate("/artisan-dashboard");
-      }
-    } catch (error) {
-      setError(error.message || "An unexpected error occurred. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setLoading(true);
+
+  const requestPayload = {
+    first_name: formData.first_name,
+    last_name: formData.last_name,
+    password: formData.password,
+    email: formData.businessEmail,
+    phone: formData.businessPhone,
+    mobile_number: formData.mobile_number,
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  
-  //   const requestPayload = {
-  //     first_name: formData.first_name,
-  //     last_name: formData.last_name,
-  //     password: formData.password,
-  //     email: formData.businessEmail,
-  //     phone: formData.businessPhone,
-  //     mobile_number: formData.mobile_number,
-  //   };
-  
-  //   try {
-  //     const response1 = await fetch(`${djangoHostname}/api/accounts/auth/api/users/${artisan_unique_id}/`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestPayload),
-  //     });
-  
-  //     if (!response1.ok) {
-  //       const errorData = await response1.json();
-  //       const errorMessage = errorData.email ? errorData.email[0] : "An error occurred.";
-  //       setError(errorMessage);
-  //       setLoading(false);
-  //       return;
-  //     }
-  
-  //     const response1Data = await response1.json();
-  //     sessionStorage.setItem('unique_user_id', response1Data.unique_id);
-  //     sessionStorage.setItem('artisanID', response1Data.id);
-  //     sessionStorage.setItem('user_type', response1Data.user_type);
-  
-  //     if (!selectedTrade || !selectedTrade.unique_id) {
-  //       setError("Please select a valid trade.");
-  //       alert("Please select a valid trade.");
-  //       setLoading(false);
-  //       return;
-  //     }
-  
-  //     const formDataPayload = new FormData();
-  //     formDataPayload.append("service_details_id", unique_id);
-  //     formDataPayload.append("business_name", formData.business_name);
-  //     formDataPayload.append("location", formData.location);
-  //     formDataPayload.append("lookingFor", formData.lookingFor);
-  //     formDataPayload.append("businessType", formData.businessType);
-  //     formDataPayload.append("employeeCount", formData.employeeCount);
-  //     formDataPayload.append("skills", JSON.stringify(formData.skills.map((skill) => String(skill))));
-  //     formDataPayload.append("experience", formData.experience || 0);
-  //     formDataPayload.append("artisan_state", formData.artisan_state);
-  //     formDataPayload.append("postcode", formData.postcode);
-  //     formDataPayload.append("user_id", response1Data.unique_id);
-  //     formDataPayload.append("about_artisan", formData.about_artisan);
+  try {
+    const response1 = await fetch(`${djangoHostname}/api/accounts/auth/api/users/${artisan_unique_id}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestPayload),
+    });
 
-  //     if (profilePhoto) formDataPayload.append("user_image", profilePhoto);
-  
-  //     // Append qualifications files
-  //     qualificationsFiles.forEach((file, index) => {
-  //       if (file instanceof File) {
-  //         formDataPayload.append("qualifications", file);
-  //       } else {
-  //         console.error("Invalid file detected:", file);
-  //       }
-  //     });
-  
-  //     // Append previousJobsFiles files
-  //     previousJobsFiles.forEach((file, index) => {
-  //       if (file instanceof File) {
-  //         formDataPayload.append("previous_jobs", file);
-  //       } else {
-  //         console.error("Invalid file detected:", file);
-  //       }
-  //     });
-  
-  //     const response2 = await fetch(`${djangoHostname}/api/profiles/auth/single-artisan-profile/?unique_id=${artisan_unique_id}`, {
-  //       method: "PATCH",
-  //       body: formDataPayload, // Don't set Content-Type manually
-  //     });
-  
-  //     if (!response2.ok) {
-  //       const errorData = await response2.json();
-  //       const errorMessage = errorData.detail ? errorData.detail : "An error occurred.";
-  //       setError(errorMessage);
-  //     } else {
-  //       const result = await response2.json();
-  //       sessionStorage.setItem('artisanCategoryName', result.data.service_details.name);
-  //       sessionStorage.setItem('artisanCategory', result.data.service_details.unique_id);
-  //       navigate("/artisan-dashboard");
-  //     }
-  //   } catch (error) {
-  //     setError(error.message || "An unexpected error occurred. Please try again later.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    if (!response1.ok) {
+      const errorData = await response1.json();
+      const errorMessage = errorData.email ? errorData.email[0] : "An error occurred.";
+      setError(errorMessage);
+      setLoading(false);
+      return;
+    }
 
+    const response1Data = await response1.json();
+    sessionStorage.setItem('unique_user_id', response1Data.unique_id);
+    sessionStorage.setItem('artisanID', response1Data.id);
+    sessionStorage.setItem('user_type', response1Data.user_type);
+
+    const formDataPayload = new FormData();
+    formDataPayload.append("business_name", formData.business_name);
+    formDataPayload.append("location", formData.location);
+    formDataPayload.append("lookingFor", formData.lookingFor);
+    formDataPayload.append("businessType", formData.businessType);
+    formDataPayload.append("employeeCount", formData.employeeCount);
+    formDataPayload.append("skills", JSON.stringify(formData.skills.map((skill) => String(skill))));
+    formDataPayload.append("experience", formData.experience || 0);
+    formDataPayload.append("artisan_state", formData.artisan_state);
+    formDataPayload.append("postcode", formData.postcode);
+    formDataPayload.append("user_id", response1Data.unique_id);
+    formDataPayload.append("about_artisan", formData.about_artisan);
+
+    // Append profile photo if it exists
+    if (profilePhoto) {
+      formDataPayload.append("user_image", profilePhoto);
+    }
+
+    // Append qualifications files
+    qualificationsFiles.forEach((file) => {
+      if (file instanceof File && !originalQualificationsFiles.includes(file.name)) {
+        formDataPayload.append("qualifications", file);
+      }
+    });
+
+    // Append previous jobs files
+    previousJobsFiles.forEach((file) => {
+      if (file instanceof File && !originalPreviousJobsFiles.includes(file.name)) {
+        formDataPayload.append("previous_jobs", file);
+      }
+    });
+
+    // Append service_details_id if a trade is selected
+    if (selectedTrade && selectedTrade.unique_id) {
+      formDataPayload.append("service_details_id", selectedTrade.unique_id);
+    }
+
+    const response2 = await fetch(`${djangoHostname}/api/profiles/auth/single-artisan-profile/?unique_id=${artisan_unique_id}`, {
+      method: "PATCH",
+      body: formDataPayload, // Don't set Content-Type manually
+    });
+
+    if (!response2.ok) {
+      const errorData = await response2.json();
+      const errorMessage = errorData.detail ? errorData.detail : "An error occurred.";
+      setError(errorMessage);
+    } else {
+      const result = await response2.json();
+      sessionStorage.setItem('artisanCategoryName', result.data.service_details.name);
+      sessionStorage.setItem('artisanCategory', result.data.service_details.unique_id);
+      navigate("/artisan-dashboard");
+    }
+  } catch (error) {
+    setError(error.message || "An unexpected error occurred. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
   const handleInputClick = () => {
     if (!query || !query.trim()) {
       setSuggestions(services);
@@ -562,37 +520,36 @@ const ProfileSettings = () => {
             <div className="Gradnded-Box-header">
               <h2 className="big-text">Profile Settings</h2>
             </div>
+
             <div className="Gradnded-Box-Body">
               <div className="Gland-Quest">
                 <div className="Gland-Quest-data">
-                  <label htmlFor="serviceSelect">What type of work do you do?</label>
+                      <label htmlFor="serviceSelect">What type of work do you do?</label>
+                      <input
+                        type="text"
+                        placeholder="Search category"
+                        name="trade" // Add name attribute
+                        value={query} // Bind to the query state
+                        onChange={handleInputChange} // Handle input changes
+                        onClick={handleInputClick} // Show suggestions on click
+                      />
 
-                  <input
-                    type="text"
-                    placeholder="Search category"
-                    value={selectedTrade.name || query} // Use selectedTrade.name when it's set, otherwise fallback to query
-                    onChange={handleInputChange}
-                    onClick={handleInputClick}
-                  />
+                      {suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                          {suggestions.map((service, index) => (
+                            <li
+                              key={index}
+                              onClick={() => handleSuggestionClick(service.name, service.unique_id)}
+                              className="suggestion-item"
+                            >
+                              {service.name}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
 
-                  {suggestions.length > 0 && (
-                    <ul className="suggestions-list">
-                      {suggestions.map((service, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleSuggestionClick(service.name, service.unique_id)}
-                          className="suggestion-item"
-                        >
-                          {service.name}
-                        </li>
-                      ))}
-                    </ul>
-
-                  )}
-
-                  {error && <div className="error-message">{error}</div>}
-                </div>
-
+                      {error && <div className="error-message">{error}</div>}
+                    </div>
 
                   <div className="glahs-sec">
                   <div className="Gland-Quest-data">
@@ -604,14 +561,51 @@ const ProfileSettings = () => {
                      placeholder="Enter your business name*" />
                   </div>
             
+
+
                   <div className="Gland-Quest-data">
-                    <label htmlFor="serviceSelect">Where is your business located?</label>
-                    <input 
-                     type="text"
-                     name="artisan_state"
-                     value={formData.artisan_state}
-                     onChange={handleInputChange}
-                     placeholder="Enter your business address*" />
+                    <label htmlFor="serviceSelect">State</label>
+                    <select name="states" id="states" value={selectedState} onChange={handleInputChange}>
+                      <option value="">Select a State</option>
+                      <option value="Abia">Abia</option>
+                      <option value="Adamawa">Adamawa</option>
+                      <option value="Akwa Ibom">Akwa Ibom</option>
+                      <option value="anambra">Anambra</option>
+                      <option value="Anambra">Bauchi</option>
+                      <option value="Bayelsa">Bayelsa</option>
+                      <option value="Benue">Benue</option>
+                      <option value="Borno">Borno</option>
+                      <option value="Cross River">Cross River</option>
+                      <option value="Delta">Delta</option>
+                      <option value="Ebonyi">Ebonyi</option>
+                      <option value="Edo">Edo</option>
+                      <option value="Ekiti">Ekiti</option>
+                      <option value="Enugu">Enugu</option>
+                      <option value="Gombe">Gombe</option>
+                      <option value="Imo">Imo</option>
+                      <option value="Jigawa">Jigawa</option>
+                      <option value="Kaduna">Kaduna</option>
+                      <option value="Kano">Kano</option>
+                      <option value="Katsina">Katsina</option>
+                      <option value="Kebbi">Kebbi</option>
+                      <option value="Kogi">Kogi</option>
+                      <option value="Kwara">Kwara</option>
+                      <option value="Lagos">Lagos</option>
+                      <option value="Nasarawa">Nasarawa</option>
+                      <option value="Niger">Niger</option>
+                      <option value="Ogun">Ogun</option>
+                      <option value="Ondo">Ondo</option>
+                      <option value="Osun">Osun</option>
+                      <option value="Oyo">Oyo</option>
+                      <option value="Plateau">Plateau</option>
+                      <option value="Rivers">Rivers</option>
+                      <option value="Sokoto">Sokoto</option>
+                      <option value="Taraba">Taraba</option>
+                      <option value="Yobe">Yobe</option>
+                      <option value="Zamfara">Zamfara</option>
+                      <option value="Federal Capital Territory (FCT)">Federal Capital Territory (FCT)</option>
+                    </select>
+
                   </div>
             
 
