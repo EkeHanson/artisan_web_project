@@ -161,7 +161,7 @@ const ArtisanHomePage = () => {
 
     const [selectedTrade, setSelectedTrade] = useState(null);
     const [showClientDetails, setShowClientDetails] = useState(false);
-    const [showChatSection, setShowChatSection] = useState(false);
+    const [showChatSection, setShowChatSection] = useState(true);
 
     const handleTradeClick = (email) => {
         setSelectedTrade(groupedMessages[email]);

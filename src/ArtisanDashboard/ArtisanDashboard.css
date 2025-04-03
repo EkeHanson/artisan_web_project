@@ -602,7 +602,7 @@
     padding: 30px !important;
     display: block !important;
     overflow-y: auto !important;
-    display: none !important;
+    /* display: none !important; */
 }
 
 .Show_Client_Chat_Sec .Client_Chat_Sec{
