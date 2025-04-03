@@ -30,9 +30,7 @@ const loadGoogleMapsScript = (callback) => {
   document.body.appendChild(script);
 };
 
-
 const ProfileSettings = () => {
-
   const [profilePhoto, setProfilePhoto] = useState(null);
   const djangoHostname = import.meta.env.VITE_DJANGO_HOSTNAME;
   const artisan_unique_id = sessionStorage.getItem('unique_user_id');

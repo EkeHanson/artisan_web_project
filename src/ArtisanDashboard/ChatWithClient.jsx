@@ -315,7 +315,7 @@ const ChatWithClient =  ({ receiverId, receiverEmail, senderId, senderIdEmail })
           <div className='call-Box'>
             <img src={artisanData.user?.image || ''} alt="User" />
             <h3>{artisanData.user?.first_name && artisanData.user?.last_name ? `${artisanData.user.first_name} ${artisanData.user.last_name}` : "Artisan Name"}</h3>
-            <p>Phone no: {artisanData.user?.phone || "Artisan Phone"}</p>
+            <p>Phone no : {artisanData.user?.phone || "Artisan Phone"}</p>
             <div className='kka-btns'>
               <button><ChatIcon /></button>
               <a href={`tel:${artisanData.user?.phone || "09012120987"}`}>
